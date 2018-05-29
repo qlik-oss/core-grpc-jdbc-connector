@@ -1,0 +1,30 @@
+version: "3.3"
+services:
+
+  postgres-database:
+    container_name: postgres-db
+    build: postgres-image/
+    ports:
+      - 54321:5432
+
+#  jdbc-connector:
+#    build: ../
+#    ports:
+#      - 50051:50051
+#
+#  qix-engine:
+#    container_name: qix-engine
+#    image: qlikcore/engine:12.171.0
+#    ports:
+#      - 19076:9076
+#    command: -S AcceptEULA=yes -S EnableGrpcCustomConnectors=1 -S GrpcConnectorPlugins="jdbc,jdbc-connector:50051"
+#
+#  node-test-runner:
+#    container_name: node-test-runner
+#    image: node:8
+#    working_dir: /reload-runner
+#    # Not working in circleCI, using cp instead to get test files
+#    volumes:
+#      - ./reload-runner:/reload-runner
+#    # Creating node busybox
+#    command: "sh -c 'while :; do ping -c 1 google.com; sleep 60; done'"

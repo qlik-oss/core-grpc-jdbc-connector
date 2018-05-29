@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run -p5433:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres-grpc-connector-database

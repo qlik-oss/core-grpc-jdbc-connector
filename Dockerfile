@@ -1,0 +1,42 @@
+#FROM openjdk:10.0-jdk-slim
+FROM openjdk:8-jdk
+
+# ----
+# Install Maven
+RUN apt-get install curl tar bash
+ARG MAVEN_VERSION=3.5.3
+ARG USER_HOME_DIR="/root"
+RUN mkdir -p /usr/share/maven && \
+curl -fsSL http://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | tar -xzC /usr/share/maven --strip-components=1 && \
+ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+ENV MAVEN_HOME /usr/share/maven
+ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+
+## speed up Maven JVM a bit
+ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+
+# ----
+# Install PostgreSql JDBC Drivers
+
+
+
+
+# ----
+# Install project dependencies and keep sources
+# make source folder
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+
+# ARG POSTGRESQL_JDBC_DRIVER_VERSION=42.2.2
+# curl -fsSL  https://jdbc.postgresql.org/download/postgresql-$POSTGRESQL_JDBC_DRIVER_VERSION.jar
+
+# install maven dependency packages (keep in image)
+COPY pom.xml /usr/src/app
+
+COPY src /usr/src/app/src
+RUN mvn install # && rm -rf target
+
+WORKDIR /usr/src/app
+ENTRYPOINT  ["mvn", "exec:java", "-e", "-Dexec.mainClass=qlik.jdbc.connector.GrpcServer"]
+
