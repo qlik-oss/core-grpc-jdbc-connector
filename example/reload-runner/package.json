@@ -1,5 +1,5 @@
 {
-  "name": "postgres-grpc-connector-example-reload-runner",
+  "name": "core-grpc-jdbc-connector-example-reload-runner",
   "private": true,
   "version": "0.0.1",
   "author": "QlikTech International AB",

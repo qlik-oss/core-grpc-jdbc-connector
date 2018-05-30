@@ -1,4 +1,3 @@
-#FROM openjdk:10.0-jdk-slim
 FROM openjdk:8-jdk
 
 # ----
@@ -18,25 +17,17 @@ ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 # ----
 # Install PostgreSql JDBC Drivers
 
-
-
-
 # ----
 # Install project dependencies and keep sources
 # make source folder
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-
-# ARG POSTGRESQL_JDBC_DRIVER_VERSION=42.2.2
-# curl -fsSL  https://jdbc.postgresql.org/download/postgresql-$POSTGRESQL_JDBC_DRIVER_VERSION.jar
-
 # install maven dependency packages (keep in image)
 COPY pom.xml /usr/src/app
 
-COPY src /usr/src/app/src
 RUN mvn install # && rm -rf target
+COPY src /usr/src/app/src
 
-WORKDIR /usr/src/app
 ENTRYPOINT  ["mvn", "exec:java", "-e", "-Dexec.mainClass=qlik.jdbc.connector.GrpcServer"]
 
