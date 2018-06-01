@@ -14,7 +14,6 @@ public class TypeConversionUtil {
             case Types.NCHAR:
             case Types.NVARCHAR:
                 return GrpcServer.FieldAttrType.TEXT_VALUE;
-
             case Types.INTEGER:
             case Types.BIGINT:
             case Types.BIT:
@@ -28,14 +27,12 @@ public class TypeConversionUtil {
             case Types.FLOAT:
             case Types.REAL:
                 return GrpcServer.FieldAttrType.REAL_VALUE;
-
             case Types.DATE:
                 return GrpcServer.FieldAttrType.DATE_VALUE;
             case Types.TIME:
                 return GrpcServer.FieldAttrType.TIME_VALUE;
             case Types.TIMESTAMP:
                 return GrpcServer.FieldAttrType.TIMESTAMP_VALUE;
-
             case Types.ARRAY:
             case Types.BINARY:
             case Types.BLOB:
