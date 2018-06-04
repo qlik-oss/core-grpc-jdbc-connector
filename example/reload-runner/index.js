@@ -49,16 +49,26 @@ session
       qPassword: 'jdbc',
     });
   })
+//  .then((_connectionId) => {
+//    connectionId = _connectionId;
+//    console.log('Setting script');
+//    const script = `
+//    lib connect to 'jdbc';
+//    Airports:
+//    sql SELECT rowID,Airport,City,Country,IATACode,ICAOCode,Latitude,Longitude,Altitude,TimeZone,DST,TZ, clock_timestamp(), clock_timestamp()::date AS date, now()::time AS time FROM airports;
+//    `; // add script to use the grpc-connector and load a table
+//    return app.setScript(script);
+//  })
   .then((_connectionId) => {
-    connectionId = _connectionId;
-    console.log('Setting script');
-    const script = `
-    lib connect to 'jdbc';
-    Airports:
-    sql SELECT rowID,Airport,City,Country,IATACode,ICAOCode,Latitude,Longitude,Altitude,TimeZone,DST,TZ, clock_timestamp() FROM airports ORDER BY Airport;
-    `; // add script to use the grpc-connector and load a table
-    return app.setScript(script);
-  })
+      connectionId = _connectionId;
+      console.log('Setting script');
+      const script = `
+      lib connect to 'jdbc';
+      AllTypes:
+      sql SELECT * FROM all_types;
+      `; // add script to use the grpc-connector and load a table
+      return app.setScript(script);
+    })
   .then(() => {
     console.log('Reloading');
     const reloadPromise = app.doReload();
@@ -81,7 +91,7 @@ session
   })
   .then(() => {
     console.log('Fetching Table sample');
-    return app.getTableData(-1, 10000, true, 'Airports');
+    return app.getTableData(-1, 10000, true, 'AllTypes');
   })
   .then((tableData) => {
     if (tableData.length === 0) {
@@ -96,7 +106,7 @@ session
 //      '4316:7 Novembre:Tabarka:Tunisia:TBJ:DTKA:36.978333:8.876389:0:1:E:Africa/Tunis';
 //    if (firstDataRow.lastIndexOf(expectedFirstDataRowExcludingDate) !== 0) {
 //      return Promise.reject(
-//        'The check on the first row content was unsuccessful',
+//        'The check on the first row content was unsuccessful got: ' + firstDataRow,
 //      );
 //    }
 
