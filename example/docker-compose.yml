@@ -17,7 +17,7 @@ services:
     image: qlikcore/engine:12.171.0
     ports:
       - 19076:9076
-    command: -S AcceptEULA=${ACCEPT_EULA} -S EnableGrpcCustomConnectors=1 -S GrpcConnectorPlugins="jdbc,selun-seb1.qliktech.com:50051"
+    command: -S AcceptEULA=${ACCEPT_EULA} -S EnableGrpcCustomConnectors=1 -S GrpcConnectorPlugins="jdbc,jdbc-connector:50051"
 #
 #  node-test-runner:
 #    container_name: node-test-runner
