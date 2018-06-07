@@ -44,9 +44,9 @@ session
       qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
       qName: 'jdbc',
       qConnectionString:
-        'CUSTOM CONNECT TO "provider=jdbc;"', // the connection string inclues both the provide to use and parameters to it.
-      qUserName: 'jdbc', // username and password for the postgres database, provided to the GRPC-Connector
-      qPassword: 'jdbc',
+        'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=192.168.0.77;port=54321;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
+      qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
+      qPassword: 'postgres',
     });
   })
 //  .then((_connectionId) => {
