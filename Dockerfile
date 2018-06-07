@@ -2,8 +2,7 @@ FROM openjdk:8-jdk
 
 # ----
 # Install Maven
-# RUN apt-get update && apt-get install curl tar bash
-RUN apt-get install curl tar bash
+RUN apt-get -y update && apt-get -y install curl tar bash
 
 ARG MAVEN_VERSION=3.5.3
 ARG USER_HOME_DIR="/root"
