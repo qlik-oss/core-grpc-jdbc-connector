@@ -35,4 +35,4 @@ RUN mvn install
 FROM openjdk:8-jre-alpine
 COPY --from=builder /usr/src/app/target/ .
 
-ENTRYPOINT ["java", "-jar", "core-grpc-jdbc-connector-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "core-grpc-jdbc-connector.jar"]
