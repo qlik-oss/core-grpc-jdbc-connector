@@ -5,6 +5,7 @@
       "max-len": "off"
   },
   "env": {
-    "node": true
+    "node": true,
+    "mocha": true
   }
 }
