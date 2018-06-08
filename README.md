@@ -6,10 +6,19 @@
 
 The reason for the division is to be able to utilize multiple CPU cores to process the different stages simultaneously.
 
+### Requirements
+- Java JDK 8.0 or higher
+- Maven 3.5.3 or higher
+
+### Run locally
+```
+mvn install
+```
+
 ### Integration testing
 Goto src/test/integration and run:
 ```
-ACCEPT_EULA=yes docker-compose up --build -d
+ACCEPT_EULA=<yes/no> docker-compose up --build -d
 ```
 Goto reload-runner and run:
 ```
