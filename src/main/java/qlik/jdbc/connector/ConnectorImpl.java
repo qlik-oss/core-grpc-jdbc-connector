@@ -1,17 +1,12 @@
 package qlik.jdbc.connector;
 
-import com.google.protobuf.Descriptors;
-import io.grpc.*;
 import io.grpc.stub.StreamObserver;
 import qlik.connect.ConnectorGrpc;
-import qlik.connect.GrpcServer;
 import qlik.connect.GrpcServer.*;
 
-
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.sql.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ConnectorImpl
         extends ConnectorGrpc.ConnectorImplBase {
@@ -41,7 +36,14 @@ public class ConnectorImpl
         String str = request.getConnection().getConnectionString();
         String sql = request.getParameters().getStatement();
 
-        System.out.println(sql);
+        Map<String, String> map = new LinkedHashMap<String, String>();
+
+        for(String keyValue: str.split(" *; *")){
+            String[] pairs = keyValue.split(" *= *", 2);
+            map.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
+        }
+
+        String connectionString = "jdbc:" + map.get("driver") + "://" + map.get("host") + ":" + map.get("port") + "/" + map.get("database");
 
         Connection conn = null;
         Statement stmt = null;
@@ -50,7 +52,7 @@ public class ConnectorImpl
             //TODO: Make driver configurable from the outside
             System.out.println("Connecting to database...");
             //TODO: The connection info should be exstracted from the connection string
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:54321/postgres", "postgres", "postgres");
+            conn = DriverManager.getConnection(connectionString, request.getConnection().getUser(), request.getConnection().getPassword());
 
             stmt = conn.createStatement();
 

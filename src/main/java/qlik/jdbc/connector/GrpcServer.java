@@ -1,4 +1,3 @@
-
 package qlik.jdbc.connector;
 
 import io.grpc.*;

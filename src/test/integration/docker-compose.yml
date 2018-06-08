@@ -7,14 +7,14 @@ services:
     ports:
       - 54321:5432
 
-#  jdbc-connector:
-#    build: ../
-#    ports:
-#      - 50051:50051
-#
+  jdbc-connector:
+    build: ../../../
+    ports:
+      - 50051:50051
+
   qix-engine:
     container_name: qix-engine
-    image: qlikcore/engine:12.171.0
+    image: qlikcore/engine:12.181.0
     ports:
       - 19076:9076
     command: -S AcceptEULA=${ACCEPT_EULA} -S EnableGrpcCustomConnectors=1 -S GrpcConnectorPlugins="jdbc,jdbc-connector:50051"

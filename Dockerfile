@@ -2,7 +2,7 @@ FROM openjdk:8-jdk
 
 # ----
 # Install Maven
-RUN apt-get update && apt-get install curl tar bash
+RUN apt-get -y update && apt-get -y install curl tar bash
 
 ARG MAVEN_VERSION=3.5.3
 ARG USER_HOME_DIR="/root"
@@ -27,8 +27,8 @@ WORKDIR /usr/src/app
 # install maven dependency packages (keep in image)
 COPY pom.xml /usr/src/app
 
-RUN mvn install
 COPY src /usr/src/app/src
 
+RUN mvn install
 ENTRYPOINT  ["mvn", "exec:java", "-e", "-Dexec.mainClass=qlik.jdbc.connector.GrpcServer"]
 
