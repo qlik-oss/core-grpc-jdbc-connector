@@ -55,6 +55,9 @@ public class ConnectorImpl
             conn = DriverManager.getConnection(connectionString, request.getConnection().getUser(), request.getConnection().getPassword());
 
             stmt = conn.createStatement();
+            conn.setAutoCommit(false);
+
+            stmt.setFetchSize(100000);
 
             ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
