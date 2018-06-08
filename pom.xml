@@ -92,6 +92,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
+                    <finalName>core-grpc-jdbc-connector</finalName>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
