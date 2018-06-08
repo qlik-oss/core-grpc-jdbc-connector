@@ -30,5 +30,4 @@ COPY pom.xml /usr/src/app
 COPY src /usr/src/app/src
 
 RUN mvn install
-ENTRYPOINT  ["mvn", "exec:java", "-e", "-Dexec.mainClass=qlik.jdbc.connector.GrpcServer"]
-
+ENTRYPOINT ["java", "-jar", "target/core-grpc-jdbc-connector-0.0.1-SNAPSHOT.jar"]
