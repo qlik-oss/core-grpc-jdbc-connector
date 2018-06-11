@@ -3,12 +3,13 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:8
-    working_directory: ~/core-grpc-jdbc-connector/src/test/integration
+    working_directory: ~/core-grpc-jdbc-connector
     steps:
       - checkout
       - setup_remote_docker
       - run:
           name: Spin up environment
+          working_directory: ~/core-grpc-jdbc-connector/src/test/integration
           command: ACCEPT_EULA=yes docker-compose up --build -d
       - run:
           name: Run integration test
