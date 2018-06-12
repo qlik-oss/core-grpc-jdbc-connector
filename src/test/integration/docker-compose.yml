@@ -2,7 +2,6 @@ version: "3.3"
 services:
 
   postgres-database:
-    container_name: postgres-db
     build: postgres-image/
     ports:
       - 54321:5432
