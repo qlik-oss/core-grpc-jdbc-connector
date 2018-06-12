@@ -12,10 +12,12 @@ public class ConnectorImpl
         extends ConnectorGrpc.ConnectorImplBase {
 
     private int fetchSize;
+    private int maxDataChunkSize;
 
-    public ConnectorImpl(Integer fetchSize){
+    public ConnectorImpl(Integer fetchSize, Integer maxDataChunkSize){
       super();
       this.fetchSize = fetchSize;
+      this.maxDataChunkSize = maxDataChunkSize;
     }
 
     public ThreadLocal<GetDataResponse> initialMetadata = new ThreadLocal<GetDataResponse>();
@@ -65,8 +67,6 @@ public class ConnectorImpl
               //Enable fetching data in chunks from the database to avoid loading everything into memory
               conn.setAutoCommit(false);
               stmt.setFetchSize(fetchSize);
-
-              System.out.println("Fetch Size limited to: " + fetchSize + " rows");
             }
 
             ResultSet rs = stmt.executeQuery(sql);
@@ -81,7 +81,6 @@ public class ConnectorImpl
 
             dataChunkBuilder = DataChunk.newBuilder();
 
-            int NR_OF_ROWS = 200;
             int rowCount = 0;
 
             while(rs.next()){
@@ -137,14 +136,14 @@ public class ConnectorImpl
                     }
                 }
 
-                if(rowCount % NR_OF_ROWS == 0){
+                if(rowCount % maxDataChunkSize == 0){
                     responseObserver.onNext(dataChunkBuilder.build());
                     dataChunkBuilder = DataChunk.newBuilder();
                 }
             }
 
             //Send the remainder of rows
-            if(rowCount % NR_OF_ROWS != 0){
+            if(rowCount % maxDataChunkSize != 0){
                 responseObserver.onNext(dataChunkBuilder.build());
             }
 
