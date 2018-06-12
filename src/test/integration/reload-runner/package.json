@@ -11,7 +11,7 @@
     "lint:fix": "eslint --fix .",
     "test": "mocha"
   },
-  "dependencies": {
+  "devDependencies": {
     "chai": "4.1.2",
     "cross-env": "5.1.6",
     "enigma.js": "2.2.0",
