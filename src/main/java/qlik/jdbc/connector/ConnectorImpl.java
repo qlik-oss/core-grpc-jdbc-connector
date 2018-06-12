@@ -11,6 +11,15 @@ import java.util.Map;
 public class ConnectorImpl
         extends ConnectorGrpc.ConnectorImplBase {
 
+    private int fetchSize;
+    private int maxDataChunkSize;
+
+    public ConnectorImpl(Integer fetchSize, Integer maxDataChunkSize){
+      super();
+      this.fetchSize = fetchSize;
+      this.maxDataChunkSize = maxDataChunkSize;
+    }
+
     public ThreadLocal<GetDataResponse> initialMetadata = new ThreadLocal<GetDataResponse>();
 
     private GetDataResponse getDataResponseHeader(ResultSetMetaData rsmd) throws SQLException {
@@ -49,12 +58,16 @@ public class ConnectorImpl
         Statement stmt = null;
 
         try{
-            //TODO: Make driver configurable from the outside
             System.out.println("Connecting to database...");
-            //TODO: The connection info should be exstracted from the connection string
             conn = DriverManager.getConnection(connectionString, request.getConnection().getUser(), request.getConnection().getPassword());
-
             stmt = conn.createStatement();
+
+
+            if(fetchSize > 0) {
+              //Enable fetching data in chunks from the database to avoid loading everything into memory
+              conn.setAutoCommit(false);
+              stmt.setFetchSize(fetchSize);
+            }
 
             ResultSet rs = stmt.executeQuery(sql);
             ResultSetMetaData rsmd = rs.getMetaData();
@@ -68,7 +81,6 @@ public class ConnectorImpl
 
             dataChunkBuilder = DataChunk.newBuilder();
 
-            int NR_OF_ROWS = 200;
             int rowCount = 0;
 
             while(rs.next()){
@@ -124,14 +136,14 @@ public class ConnectorImpl
                     }
                 }
 
-                if(rowCount % NR_OF_ROWS == 0){
+                if(rowCount % maxDataChunkSize == 0){
                     responseObserver.onNext(dataChunkBuilder.build());
                     dataChunkBuilder = DataChunk.newBuilder();
                 }
             }
 
             //Send the remainder of rows
-            if(rowCount % NR_OF_ROWS != 0){
+            if(rowCount % maxDataChunkSize != 0){
                 responseObserver.onNext(dataChunkBuilder.build());
             }
 

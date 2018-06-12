@@ -34,7 +34,7 @@ describe('Type check', async () => {
       qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
       qName: 'jdbc',
       qConnectionString:
-            `CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=${host};port=54321;database=postgres"`, // the connection string inclues both the provide to use and parameters to it.
+            `CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"`, // the connection string inclues both the provide to use and parameters to it.
       qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
       qPassword: 'postgres',
     });

@@ -4,6 +4,7 @@ import io.grpc.*;
 import io.grpc.ForwardingServerCall.SimpleForwardingServerCall;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class GrpcServer {
 
@@ -36,7 +37,23 @@ public class GrpcServer {
 
     static public void main(String [] args) throws IOException, InterruptedException {
 
-        ConnectorImpl connector = new ConnectorImpl();
+        Map<String, String> env = System.getenv();
+
+        int fetchSize = 0;
+        String fetchSizeStr = env.get("DATABASE_FETCH_SIZE");
+        if(fetchSizeStr != null){
+          fetchSize = Integer.parseInt(fetchSizeStr);
+          System.out.println("Fetch Size limited to: " + fetchSize + " rows");
+        }
+
+        int maxDataChunkSize = 200;
+        String maxDataChunkSizeStr = env.get("MAX_DATA_CHUNK_SIZE");
+        if(maxDataChunkSizeStr != null){
+          maxDataChunkSize = Integer.parseInt(maxDataChunkSizeStr);
+          System.out.println("Fetch max data chunk size limited to: " + maxDataChunkSize);
+        }
+
+       ConnectorImpl connector = new ConnectorImpl(fetchSize, maxDataChunkSize);
 
         //TODO: Make port configurable with args
         io.grpc.Server server = ServerBuilder.forPort(50051)
