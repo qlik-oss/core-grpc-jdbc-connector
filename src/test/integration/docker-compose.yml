@@ -10,6 +10,8 @@ services:
     build: ../../../
     ports:
       - 50051:50051
+#    environment:
+#      DATABASE_FETCH_SIZE: 99999
 
   qix-engine:
     container_name: qix-engine
