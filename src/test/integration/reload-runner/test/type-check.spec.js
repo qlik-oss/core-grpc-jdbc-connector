@@ -16,6 +16,9 @@ const session = enigma.create({
   },
 });
 
+session.on('traffic:sent', data => console.log('sent:', JSON.stringify(data)));
+session.on('traffic:received', data => console.log('received:', JSON.stringify(data)));
+
 const appId = 'reloadapp.qvf';
 
 describe('Type check', async () => {
@@ -30,11 +33,11 @@ describe('Type check', async () => {
       app = await global.openDoc(appId);
     }
 
-    const connectionId = await app.createConnection({
+    await app.createConnection({
       qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
       qName: 'jdbc',
       qConnectionString:
-            `CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"`, // the connection string inclues both the provide to use and parameters to it.
+            'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
       qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
       qPassword: 'postgres',
     });
@@ -45,12 +48,7 @@ describe('Type check', async () => {
         sql SELECT * FROM all_types;
         `;
     await app.setScript(script);
-
-    const reloadRequestId = await app.doReload().requestId;
-    await global.getProgress(reloadRequestId);
-    await app.deleteConnection(connectionId);
-    await app.setScript('');
-    await app.doSave();
+    await app.doReload();
 
     let fieldInfo = await app.getFieldDescription('type_small_int');
     expect(fieldInfo.qTags).to.include('$integer');
@@ -98,6 +96,6 @@ describe('Type check', async () => {
     fieldInfo = await app.getFieldDescription('type_char');
     expect(fieldInfo.qTags).to.include('$text');
 
-    session.close();
+    await session.close();
   });
 });

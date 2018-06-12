@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 const schema = require('enigma.js/schemas/12.20.0.json');
 const enigma = require('enigma.js');
 
-const host = process.argv.slice(2)[0] || 'localhost';
+const host = process.env.ENGINE_HOST || 'localhost';
 const port = host === 'localhost' ? 19076 : 9076;
 
 // create a new session:
@@ -14,27 +14,27 @@ const session = enigma.create({
   },
 });
 
-let loadData = async function(){
+describe('Load data', async () => {
+  it('should list all tables', async () => {
     const appId = 'reloadapp.qvf';
-    let startTime = Date.now();
-    let global = await session.open();
+    const startTime = Date.now();
+    const global = await session.open();
     let app;
 
-    try{
-        let appInfo = await global.createApp(appId);
-        app = await global.openDoc(appInfo.qAppId);
-    }
-    catch(e){
-        app = await global.openDoc(appId);
+    try {
+      const appInfo = await global.createApp(appId);
+      app = await global.openDoc(appInfo.qAppId);
+    } catch (e) {
+      app = await global.openDoc(appId);
     }
 
-    let connectionId = await app.createConnection({
-        qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
-        qName: 'jdbc',
-        qConnectionString:
+    const connectionId = await app.createConnection({
+      qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
+      qName: 'jdbc',
+      qConnectionString:
         'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
-        qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
-        qPassword: 'postgres',
+      qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
+      qPassword: 'postgres',
     });
 
     const script = `
@@ -47,14 +47,13 @@ let loadData = async function(){
     const reloadRequestId = await app.doReload().requestId;
     await global.getProgress(reloadRequestId);
 
-    console.log("Reload took: " + (Date.now() - startTime) + " ms");
+    console.log(`Reload took: ${Date.now() - startTime} ms`);
 
     await app.deleteConnection(connectionId);
     await app.setScript('');
     await app.doSave();
 
-
-    let tableData = await app.getTableData(-1, 10000, true, 'airports');
+    const tableData = await app.getTableData(-1, 10000, true, 'airports');
 
     const tableDataAsString = tableData
       .map(row =>
@@ -66,7 +65,6 @@ let loadData = async function(){
 
     console.log(tableDataAsString);
 
-    session.close();
-}
-
-loadData();
+    await session.close();
+  });
+});
