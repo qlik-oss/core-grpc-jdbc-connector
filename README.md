@@ -2,27 +2,52 @@
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector.svg?style=shield)](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector)
 
-- database_reader - reads the data from the database into reasonably sized SQL data chunks.
-- async_translator - takes the SQL data chunks and translates them into GRPC data chunks.
-- async_stream_writer - takes the GRPC data chunks and writes them onto the GRPC stream.
+This connector will exemplify how a JDBC gRPC Connector can be written. This connector contains an example that includes a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
 
-The reason for the division is to be able to utilize multiple CPU cores to process the different stages simultaneously.
+## Run example
+
+Goto the examples folder and run:
+```
+ACCEPT_EULA=<yes/no> docker-compose up --build -d
+```
+
+Then goto the reload-runner directory and install NodeJs dependencies with:
+
+```
+npm install
+```
+
+To run the example:
+
+```
+npm start
+```
+
+To run integration tests:
+```
+npm test
+```
+
+## Run locally
 
 ### Requirements
-- Java JDK 8.0 or higher
-- Maven 3.5.3 or higher
+- Java JDK 8.0
+- Maven 3.5.3
 
-### Run locally
 ```
 mvn install
 ```
 
-### Integration testing
-Goto src/test/integration and run:
+## Add other JDBC Drivers
+Other JDBC Drivers can be added to the pom.xml file in the following section:
+
 ```
-ACCEPT_EULA=<yes/no> docker-compose up --build -d
+<dependencies>
+  <dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.2.2</version>
+  </dependency>
+</dependencies>
 ```
-Goto reload-runner and run:
-```
-npm install && npm test
-```
+

@@ -1,0 +1,3 @@
+type_small_int,type_integer,type_bigint,type_bit,type_numeric,type_double,type_real,type_decimal,type_boolean,type_date,type_time,type_timestamp,type_text,type_varchar,type_char
+-32768,-2147483648,-9223372036854775808,0,-99.9999, -987654321.101234,-99.99999,-99.9999,0,"2018-05-31","17:03","2018-05-31 17:03","text type","varchar type",c
+32767,2147483647,9223372036854775807,1,99.9999,987654321.101234,99.99999,99.9999,1,"2018-05-31","17:03","2018-05-31 17:03","text type","varchar type",c
