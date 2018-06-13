@@ -3,7 +3,7 @@ const schema = require('enigma.js/schemas/12.20.0.json');
 const enigma = require('enigma.js');
 
 const host = process.env.ENGINE_HOST || 'localhost';
-const port = host === 'localhost' ? 19076 : 9076;
+const port = 19076;
 
 // create a new session:
 const session = enigma.create({
