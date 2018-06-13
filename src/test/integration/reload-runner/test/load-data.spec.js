@@ -16,7 +16,7 @@ const session = enigma.create({
 
 describe('Load data', async () => {
   it('should list all tables', async () => {
-    const appId = 'reloadapp.qvf';
+    const appId = 'reloadapp2.qvf';
     const startTime = Date.now();
     const global = await session.open();
     let app;
