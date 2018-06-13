@@ -28,7 +28,7 @@ describe('Load data', async () => {
       app = await global.openDoc(appId);
     }
 
-    const connectionId = await app.createConnection({
+    await app.createConnection({
       qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
       qName: 'jdbc',
       qConnectionString:
@@ -44,16 +44,12 @@ describe('Load data', async () => {
     `;
     await app.setScript(script);
 
-    const reloadRequestId = await app.doReload().requestId;
-    await global.getProgress(reloadRequestId);
+    await app.doReload();
 
     console.log(`Reload took: ${Date.now() - startTime} ms`);
-
-    await app.deleteConnection(connectionId);
-    await app.setScript('');
     await app.doSave();
 
-    const tableData = await app.getTableData(-1, 10000, true, 'airports');
+    const tableData = await app.getTableData(-1, 100, true, 'airports');
 
     const tableDataAsString = tableData
       .map(row =>
