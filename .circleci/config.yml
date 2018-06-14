@@ -9,11 +9,11 @@ jobs:
       - setup_remote_docker
       - run:
           name: Spin up environment
-          working_directory: ~/core-grpc-jdbc-connector/src/test/integration
+          working_directory: ~/core-grpc-jdbc-connector/example
           command: ACCEPT_EULA=yes docker-compose up --build -d
       - run:
           name: Run integration test
-          working_directory: ~/core-grpc-jdbc-connector/src/test/integration/reload-runner
+          working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
           command: |
             set -e
             ENGINE_CONTAINER_ID=$(docker ps -aqf "name=qix-engine")

@@ -7,7 +7,7 @@ services:
       - 54321:5432
 
   jdbc-connector:
-    build: ../../../
+    build: ../
     ports:
       - 50051:50051
     environment:
