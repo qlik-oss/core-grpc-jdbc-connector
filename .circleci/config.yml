@@ -2,10 +2,23 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8
-    working_directory: ~/core-grpc-jdbc-connector
+      - image: circleci/node:8.9.3
+    working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
     steps:
-      - checkout
+      - checkout:
+          path: ~/core-grpc-jdbc-connector
+      - restore_cache:
+          key: npm-dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install --quiet
+      - run:
+          name: Run ESLint
+          command: npm run lint
+      - save_cache:
+          key: npm-dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
       - setup_remote_docker
       - run:
           name: Spin up environment
@@ -13,11 +26,10 @@ jobs:
           command: ACCEPT_EULA=yes docker-compose up --build -d
       - run:
           name: Run integration test
-          working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
           command: |
             set -e
             ENGINE_CONTAINER_ID=$(docker ps -aqf "name=qix-engine")
             GATEWAY_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$ENGINE_CONTAINER_ID")
             TEST_CONTAINER_ID=$(docker run -d -e ENGINE_HOST=$GATEWAY_IP node:9.8.0 tail -f /dev/null)
             docker cp . $TEST_CONTAINER_ID:/
-            docker exec $TEST_CONTAINER_ID sh -c 'npm install && npm test'
+            docker exec $TEST_CONTAINER_ID sh -c 'npm test && npm run start:ci'

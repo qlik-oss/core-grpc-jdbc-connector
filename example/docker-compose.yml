@@ -20,13 +20,3 @@ services:
     ports:
       - 19076:9076
     command: -S AcceptEULA=${ACCEPT_EULA} -S EnableGrpcCustomConnectors=1 -S GrpcConnectorPlugins="jdbc,jdbc-connector:50051"
-#
-#  node-test-runner:
-#    container_name: node-test-runner
-#    image: node:8
-#    working_dir: /reload-runner
-#    # Not working in circleCI, using cp instead to get test files
-#    volumes:
-#      - ./reload-runner:/reload-runner
-#    # Creating node busybox
-#    command: "sh -c 'while :; do ping -c 1 google.com; sleep 60; done'"
