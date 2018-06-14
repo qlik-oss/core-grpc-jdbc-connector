@@ -28,6 +28,22 @@ To run integration tests:
 npm test
 ```
 
+### Performance tips
+
+The perfomance of the JDBC gRPC connector can be tweaked with a few different environment settings.
+
+To limit the amount of memory consumed in the connector when fetching data from the database the `DATABASE_FETCH_SIZE` can be used.
+If nothing is set then entire database query will be loaded into the memory of the connector.
+If `DATABASE_FETCH_SIZE` is entered then that will set the amount rows fetched from the database loaded into memory in batches.
+The default `DATABASE_FETCH_SIZE` is set to 100000.
+
+Another performance tweak is the size of the Data Chunks sent over gRPC to QIX Engine.
+The `MAX_DATA_CHUNK_SIZE` represent how many fields can be batched together in one package.
+This setting is highly dependant on the content of the fields and the package should be keept below the default 4MB gRPC package size limit.
+The default `MAX_DATA_CHUNK_SIZE` is set to 300
+
+These settings can be changed in the example in [docker-compose.yml](/examples/docker-compose.yml) file.
+
 ## Run locally
 
 ### Requirements
@@ -50,4 +66,3 @@ Other JDBC Drivers can be added to the pom.xml file in the following section:
   </dependency>
 </dependencies>
 ```
-
