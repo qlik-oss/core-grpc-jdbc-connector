@@ -53,9 +53,8 @@ public class GrpcServer {
           System.out.println("Fetch max data chunk size limited to: " + maxDataChunkSize);
         }
 
-       ConnectorImpl connector = new ConnectorImpl(fetchSize, maxDataChunkSize);
+        ConnectorImpl connector = new ConnectorImpl(fetchSize, maxDataChunkSize);
 
-        //TODO: Make port configurable with args
         io.grpc.Server server = ServerBuilder.forPort(50051)
                 .addService(ServerInterceptors.intercept(connector, new HeaderServerInterceptor(connector)))
                 .build()
