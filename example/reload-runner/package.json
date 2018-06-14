@@ -7,7 +7,8 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "mocha --timeout 10s"
+    "test": "mocha --timeout 10s",
+    "start:ci": "node index.js"
   },
   "dependencies": {
     "enigma.js": "2.2.0",
