@@ -19,7 +19,7 @@ const session = enigma.create({
 session.on('traffic:sent', data => console.log('sent:', JSON.stringify(data)));
 session.on('traffic:received', data => console.log('received:', JSON.stringify(data)));
 
-const appId = 'reloadapp.qvf';
+const appId = 'typecheck.qvf';
 
 describe('Type check', async () => {
   it('should have correct type in QIX', async () => {
