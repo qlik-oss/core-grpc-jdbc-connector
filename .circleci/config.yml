@@ -32,4 +32,4 @@ jobs:
             GATEWAY_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' "$ENGINE_CONTAINER_ID")
             TEST_CONTAINER_ID=$(docker run -d -e ENGINE_HOST=$GATEWAY_IP node:9.8.0 tail -f /dev/null)
             docker cp . $TEST_CONTAINER_ID:/
-            docker exec $TEST_CONTAINER_ID sh -c 'npm test && npm run start:ci {{ENGINE_HOST}}'
+            docker exec $TEST_CONTAINER_ID sh -c 'npm test && npm run start:ci $ENGINE_HOST'
