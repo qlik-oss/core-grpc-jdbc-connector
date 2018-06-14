@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9.3
-    working_directory: ~/core-grpc-jdbc-connector/src/test/integration/reload-runner
+    working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
     steps:
       - checkout:
           path: ~/core-grpc-jdbc-connector
@@ -22,7 +22,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Spin up environment
-          working_directory: ~/core-grpc-jdbc-connector/src/test/integration
+          working_directory: ~/core-grpc-jdbc-connector/example
           command: ACCEPT_EULA=yes docker-compose up --build -d
       - run:
           name: Run integration test
