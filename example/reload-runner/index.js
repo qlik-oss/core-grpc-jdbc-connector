@@ -33,18 +33,8 @@ const mysqlConnectionSettings = {
 };
 
 
-async function loadData(connectionSettings) {
-  const appId = 'reloadapp.qvf';
+async function loadData(app, connectionSettings) {
   const startTime = Date.now();
-  const global = await session.open();
-  let app;
-
-  try {
-    const appInfo = await global.createApp(appId);
-    app = await global.openDoc(appInfo.qAppId);
-  } catch (e) {
-    app = await global.openDoc(appId);
-  }
 
   const connectionId = await app.createConnection(connectionSettings);
 
@@ -54,16 +44,13 @@ async function loadData(connectionSettings) {
     sql SELECT * FROM airports;
     `;
   await app.setScript(script);
-
-  const reloadRequestId = await app.doReload().requestId;
-  await global.getProgress(reloadRequestId);
+  await app.doReload().requestId;
 
   console.log(`Reload took: ${Date.now() - startTime} ms`);
 
   await app.deleteConnection(connectionId);
   await app.setScript('');
   await app.doSave();
-
 
   const tableData = await app.getTableData(-1, 100, true, 'airports');
 
@@ -79,11 +66,22 @@ async function loadData(connectionSettings) {
 }
 
 async function load() {
+  const appId = 'reloadapp.qvf';
+  const global = await session.open();
+  let app;
+
+  try {
+    const appInfo = await global.createApp(appId);
+    app = await global.openDoc(appInfo.qAppId);
+  } catch (e) {
+    app = await global.openDoc(appId);
+  }
+
   console.log('Loading from PostgreSQL');
-  await loadData(postgresqlConnectionSettings);
+  await loadData(app, postgresqlConnectionSettings);
 
   console.log('Loading from MySQL');
-  await loadData(mysqlConnectionSettings);
+  await loadData(app, mysqlConnectionSettings);
 
   session.close();
 }
