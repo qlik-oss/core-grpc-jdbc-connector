@@ -1,0 +1,1 @@
+docker run -p3306:3306 -e MYSQL_ROOT_PASSWORD=mysecretpassword mysql-grpc-connector-database

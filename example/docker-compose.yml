@@ -1,6 +1,14 @@
 version: "3.3"
 services:
 
+  mysql-database:
+    build: mysql-image/
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: airport
+
   postgres-database:
     build: postgres-image/
     ports:

@@ -14,7 +14,26 @@ const session = enigma.create({
   },
 });
 
-async function loadData() {
+const postgresqlConnectionSettings = {
+   qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
+   qName: 'jdbc',
+   qConnectionString:
+   'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
+   qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
+   qPassword: 'postgres',
+};
+
+const mysqlConnectionSettings = {
+  qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
+  qName: 'jdbc',
+  qConnectionString:
+  'CUSTOM CONNECT TO "provider=jdbc;driver=mysql;host=mysql-database;port=3306;database=airport"', // the connection string inclues both the provide to use and parameters to it.
+  qUserName: 'root', // username and password for the postgres database, provided to the GRPC-Connector
+  qPassword: 'mysecretpassword'
+};
+
+
+async function loadData(connectionSettings) {
   const appId = 'reloadapp.qvf';
   const startTime = Date.now();
   const global = await session.open();
@@ -27,14 +46,7 @@ async function loadData() {
     app = await global.openDoc(appId);
   }
 
-  const connectionId = await app.createConnection({
-    qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
-    qName: 'jdbc',
-    qConnectionString:
-        'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
-    qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
-    qPassword: 'postgres',
-  });
+  let connectionId = await app.createConnection(connectionSettings);
 
   const script = `
     lib connect to 'jdbc';
@@ -53,7 +65,7 @@ async function loadData() {
   await app.doSave();
 
 
-  const tableData = await app.getTableData(-1, 10000, true, 'airports');
+  const tableData = await app.getTableData(-1, 100, true, 'airports');
 
   const tableDataAsString = tableData
       .map(row =>
@@ -64,8 +76,17 @@ async function loadData() {
       .reduce((row1, row2) => `${row1}\n${row2}`);
 
   console.log(tableDataAsString);
+}
+
+async function load(){
+
+  console.log("Loading from PostgreSQL");
+  await loadData(postgresqlConnectionSettings)
+
+  console.log("Loading from MySQL");
+  await loadData(mysqlConnectionSettings);
 
   session.close();
 }
 
-loadData();
+load();
