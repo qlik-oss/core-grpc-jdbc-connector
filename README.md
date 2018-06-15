@@ -66,3 +66,8 @@ Other JDBC Drivers can be added to the pom.xml file in the following section:
   </dependency>
 </dependencies>
 ```
+
+
+## License
+This repository is licensed under [MIT](/LICENSE) but components used in the built Docker images are under other licenses.
+Make sure that you are complying with those licenses when using the built images.
