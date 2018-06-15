@@ -15,12 +15,12 @@ const session = enigma.create({
 });
 
 const postgresqlConnectionSettings = {
-   qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
-   qName: 'jdbc',
-   qConnectionString:
+  qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
+  qName: 'jdbc',
+  qConnectionString:
    'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
-   qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
-   qPassword: 'postgres',
+  qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
+  qPassword: 'postgres',
 };
 
 const mysqlConnectionSettings = {
@@ -29,7 +29,7 @@ const mysqlConnectionSettings = {
   qConnectionString:
   'CUSTOM CONNECT TO "provider=jdbc;driver=mysql;host=mysql-database;port=3306;database=airport"', // the connection string inclues both the provide to use and parameters to it.
   qUserName: 'root', // username and password for the postgres database, provided to the GRPC-Connector
-  qPassword: 'mysecretpassword'
+  qPassword: 'mysecretpassword',
 };
 
 
@@ -46,7 +46,7 @@ async function loadData(connectionSettings) {
     app = await global.openDoc(appId);
   }
 
-  let connectionId = await app.createConnection(connectionSettings);
+  const connectionId = await app.createConnection(connectionSettings);
 
   const script = `
     lib connect to 'jdbc';
@@ -78,12 +78,11 @@ async function loadData(connectionSettings) {
   console.log(tableDataAsString);
 }
 
-async function load(){
+async function load() {
+  console.log('Loading from PostgreSQL');
+  await loadData(postgresqlConnectionSettings);
 
-  console.log("Loading from PostgreSQL");
-  await loadData(postgresqlConnectionSettings)
-
-  console.log("Loading from MySQL");
+  console.log('Loading from MySQL');
   await loadData(mysqlConnectionSettings);
 
   session.close();
