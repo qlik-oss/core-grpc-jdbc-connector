@@ -1,8 +1,8 @@
-# Example JDBC gRPC Connector - Work in progress
+# Example JDBC gRPC Connector
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector.svg?style=shield)](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector)
 
-This connector will exemplify how a JDBC gRPC Connector can be written. This connector contains an example that includes a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
+This connector will exemplify how a JDBC gRPC Connector can be written. This connector contains an example that includes a MySQL Database, a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
 
 ## Run example
 
@@ -52,6 +52,7 @@ These settings can be changed in the example in [docker-compose.yml](/examples/d
 
 ```
 mvn install
+java -jar ./target/core-grpc-jdbc-connector.jar
 ```
 
 ## Add other JDBC Drivers
