@@ -14,27 +14,29 @@ const session = enigma.create({
   },
 });
 
-async function loadData() {
-  const appId = 'reloadapp.qvf';
+const postgresqlConnectionSettings = {
+  qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
+  qName: 'jdbc',
+  qConnectionString:
+   'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string includes both the provide to use and parameters to it.
+  qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
+  qPassword: 'postgres',
+};
+
+const mysqlConnectionSettings = {
+  qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
+  qName: 'jdbc',
+  qConnectionString:
+  'CUSTOM CONNECT TO "provider=jdbc;driver=mysql;host=mysql-database;port=3306;database=airport"', // the connection string includes both the provide to use and parameters to it.
+  qUserName: 'root', // username and password for the postgres database, provided to the GRPC-Connector
+  qPassword: 'mysecretpassword',
+};
+
+
+async function loadData(app, connectionSettings) {
   const startTime = Date.now();
-  const global = await session.open();
-  let app;
 
-  try {
-    const appInfo = await global.createApp(appId);
-    app = await global.openDoc(appInfo.qAppId);
-  } catch (e) {
-    app = await global.openDoc(appId);
-  }
-
-  const connectionId = await app.createConnection({
-    qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
-    qName: 'jdbc',
-    qConnectionString:
-        'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
-    qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
-    qPassword: 'postgres',
-  });
+  const connectionId = await app.createConnection(connectionSettings);
 
   const script = `
     lib connect to 'jdbc';
@@ -42,9 +44,7 @@ async function loadData() {
     sql SELECT * FROM airports;
     `;
   await app.setScript(script);
-
-  const reloadRequestId = await app.doReload().requestId;
-  await global.getProgress(reloadRequestId);
+  await app.doReload();
 
   console.log(`Reload took: ${Date.now() - startTime} ms`);
 
@@ -52,8 +52,7 @@ async function loadData() {
   await app.setScript('');
   await app.doSave();
 
-
-  const tableData = await app.getTableData(-1, 10000, true, 'airports');
+  const tableData = await app.getTableData(-1, 100, true, 'airports');
 
   const tableDataAsString = tableData
       .map(row =>
@@ -64,8 +63,29 @@ async function loadData() {
       .reduce((row1, row2) => `${row1}\n${row2}`);
 
   console.log(tableDataAsString);
-
-  session.close();
 }
 
-loadData();
+async function load() {
+  const appId = 'reloadapp.qvf';
+  const global = await session.open();
+  let app;
+
+  try {
+    const appInfo = await global.createApp(appId);
+    app = await global.openDoc(appInfo.qAppId);
+  } catch (e) {
+    app = await global.openDoc(appId);
+  }
+
+  console.log('Loading from MySQL');
+  await loadData(app, mysqlConnectionSettings);
+
+  console.log('Loading from PostgreSQL');
+  await loadData(app, postgresqlConnectionSettings);
+
+  await global.deleteApp(appId);
+
+  await session.close();
+}
+
+load();
