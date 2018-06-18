@@ -83,7 +83,7 @@ async function load() {
   console.log('Loading from MySQL');
   await loadData(app, mysqlConnectionSettings);
 
-  session.close();
+  await session.close();
 }
 
 load();

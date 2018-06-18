@@ -1,4 +1,4 @@
-owID,Airport,City,Country,IATA Code,ICAO Code,Latitude,Longitude,Altitude (ft),TimeZone,DST,TZ Database time zone
+rowID,Airport,City,Country,IATA Code,ICAO Code,Latitude,Longitude,Altitude (ft),TimeZone,DST,TZ Database time zone
 5871,Moala Airport,Moala,Fiji,MFJ,NFMO,-18.5667,179.951,13,12,U,Pacific/Fiji
 7593,Arorae Island Airport,Arorae,Kiribati,AIS,NGTR,-2.633333,179.816667,6,10,U,\N
 5876,Koro Island Airport,Koro Island,Fiji,KXF,NFNO,-17.3458,179.422,358,12,U,Pacific/Fiji
