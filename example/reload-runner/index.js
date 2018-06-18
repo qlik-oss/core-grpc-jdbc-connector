@@ -18,7 +18,7 @@ const postgresqlConnectionSettings = {
   qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
   qName: 'jdbc',
   qConnectionString:
-   'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string inclues both the provide to use and parameters to it.
+   'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string includes both the provide to use and parameters to it.
   qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
   qPassword: 'postgres',
 };
@@ -27,7 +27,7 @@ const mysqlConnectionSettings = {
   qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
   qName: 'jdbc',
   qConnectionString:
-  'CUSTOM CONNECT TO "provider=jdbc;driver=mysql;host=mysql-database;port=3306;database=airport"', // the connection string inclues both the provide to use and parameters to it.
+  'CUSTOM CONNECT TO "provider=jdbc;driver=mysql;host=mysql-database;port=3306;database=airport"', // the connection string includes both the provide to use and parameters to it.
   qUserName: 'root', // username and password for the postgres database, provided to the GRPC-Connector
   qPassword: 'mysecretpassword',
 };
@@ -44,7 +44,7 @@ async function loadData(app, connectionSettings) {
     sql SELECT * FROM airports;
     `;
   await app.setScript(script);
-  await app.doReload().requestId;
+  await app.doReload();
 
   console.log(`Reload took: ${Date.now() - startTime} ms`);
 
@@ -77,11 +77,13 @@ async function load() {
     app = await global.openDoc(appId);
   }
 
+  console.log('Loading from MySQL');
+  await loadData(app, mysqlConnectionSettings);
+
   console.log('Loading from PostgreSQL');
   await loadData(app, postgresqlConnectionSettings);
 
-  console.log('Loading from MySQL');
-  await loadData(app, mysqlConnectionSettings);
+  await global.deleteApp(appId);
 
   await session.close();
 }
