@@ -53,7 +53,7 @@ public class GrpcClient {
 
         System.out.println("Client Starting!");
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("selun-seb1.qliktech.com", 50051).usePlaintext().intercept(new HeaderClientInterceptor()).build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().intercept(new HeaderClientInterceptor()).build();
 
         ConnectorGrpc.ConnectorStub stub = ConnectorGrpc.newStub(channel);
 
