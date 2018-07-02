@@ -2,28 +2,28 @@
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector.svg?style=shield)](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector)
 
-This connector will exemplify how a JDBC gRPC Connector can be written. This connector contains an example that includes a MySQL Database, a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
+This connector exemplifies how a JDBC gRPC Connector can be written. It contains an example that includes a MySQL Database, a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
 
 ## Run example
 
-Goto the examples folder and run:
+Go to the examples folder and run the following:
 ```
 ACCEPT_EULA=<yes/no> docker-compose up --build -d
 ```
 
-Then goto the reload-runner directory and install NodeJs dependencies with:
+Then go to the reload-runner directory and install NodeJs dependencies:
 
 ```
 npm install
 ```
 
-To run the example:
+Use the following command to run the example:
 
 ```
 npm start
 ```
 
-To run integration tests:
+To run integration tests, use the following command:
 ```
 npm test
 ```
@@ -32,13 +32,13 @@ npm test
 
 The perfomance of the JDBC gRPC connector can be tweaked with a few different environment settings.
 
-To limit the amount of memory consumed in the connector when fetching data from the database the `DATABASE_FETCH_SIZE` can be used.
-If nothing is set then entire database query will be loaded into the memory of the connector.
-If `DATABASE_FETCH_SIZE` is entered then that will set the amount rows fetched from the database loaded into memory in batches.
-The default `DATABASE_FETCH_SIZE` is set to 100000.
+You can use the `DATABASE_FETCH_SIZE` command to limit the memory consumption in the connector when fetching data from the database.
+`DATABASE_FETCH_SIZE` sets the amount of rows fetched from the database loaded into memory in batches.
+The default `DATABASE_FETCH_SIZE` is 100000.
+If `DATABASE_FETCH_SIZE` is not set, the entire database query is loaded into the memory of the connector.
 
-Another performance tweak is the size of the Data Chunks sent over gRPC to QIX Engine.
-The `MAX_DATA_CHUNK_SIZE` represent how many fields can be batched together in one package.
+You can use the `MAX_DATA_CHUNK_SIZE` command to tweak the size of the data chunks sent over gRPC to QIX Engine.
+The `MAX_DATA_CHUNK_SIZE` represents how many fields can be batched together in one package.
 This setting is highly dependant on the content of the fields and the package should be keept below the default 4MB gRPC package size limit.
 The default `MAX_DATA_CHUNK_SIZE` is set to 300
 
