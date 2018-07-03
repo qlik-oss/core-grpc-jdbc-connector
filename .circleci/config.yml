@@ -15,6 +15,9 @@ jobs:
       - run:
           name: Run ESLint
           command: npm run lint
+      - run:
+          name: Run unittest
+          command: nvm test
       - save_cache:
           key: npm-dependency-cache-{{ checksum "package.json" }}
           paths:
@@ -33,3 +36,4 @@ jobs:
             TEST_CONTAINER_ID=$(docker run -d -e ENGINE_HOST=$GATEWAY_IP node:9.8.0 tail -f /dev/null)
             docker cp . $TEST_CONTAINER_ID:/
             docker exec $TEST_CONTAINER_ID sh -c 'npm test && npm run start:ci'
+            
