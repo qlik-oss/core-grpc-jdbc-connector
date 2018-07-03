@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8.9.3
+      - image: maven:3.5.4-jdk-8
     working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
     steps:
       - checkout:
