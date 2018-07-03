@@ -33,7 +33,6 @@ jobs:
             TEST_CONTAINER_ID=$(docker run -d -e ENGINE_HOST=$GATEWAY_IP node:9.8.0 tail -f /dev/null)
             docker cp . $TEST_CONTAINER_ID:/
             docker exec $TEST_CONTAINER_ID sh -c 'npm test && npm run start:ci'
-  test:
     docker:
       - image: maven:3.5.4-jdk-8
     working_directory: ~/core-grpc-jdbc-connector/
