@@ -24,7 +24,7 @@ services:
 
   qix-engine:
     container_name: qix-engine
-    image: qlikcore/engine:12.181.0
+    image: qlikcore/engine:12.207.0
     ports:
       - 19076:9076
     command: -S AcceptEULA=${ACCEPT_EULA} -S EnableGrpcCustomConnectors=1 -S GrpcConnectorPlugins="jdbc,jdbc-connector:50051"
