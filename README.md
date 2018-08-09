@@ -48,7 +48,7 @@ These settings can be changed in the example in [docker-compose.yml](/examples/d
 
 ### Requirements
 - Java JDK 8.0
-- Maven 3.5.3
+- Maven 3.3.9
 
 ```
 mvn install
