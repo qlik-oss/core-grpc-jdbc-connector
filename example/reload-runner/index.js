@@ -55,11 +55,9 @@ async function loadData(app, connectionSettings) {
   const tableData = await app.getTableData(-1, 100, true, 'airports');
 
   const tableDataAsString = tableData
-    .map(row =>
-      row.qValue
-        .map(value => value.qText)
-        .reduce((left, right) => `${left}\t${right}`),
-    )
+    .map(row => row.qValue
+      .map(value => value.qText)
+      .reduce((left, right) => `${left}\t${right}`))
     .reduce((row1, row2) => `${row1}\n${row2}`);
 
   console.log(tableDataAsString);
