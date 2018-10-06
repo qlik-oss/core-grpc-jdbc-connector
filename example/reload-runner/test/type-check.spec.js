@@ -80,9 +80,9 @@ describe('Type check', async () => {
     fieldInfo = await app.getFieldDescription('type_date');
     expect(fieldInfo.qTags).to.include('$timestamp');
 
-//        // Not getting the right type from QIX
-//        fieldInfo = await app.getFieldDescription("type_time");
-//        expect(fieldInfo.qTags).to.include('$timestamp');
+    //        // Not getting the right type from QIX
+    //        fieldInfo = await app.getFieldDescription("type_time");
+    //        expect(fieldInfo.qTags).to.include('$timestamp');
 
     fieldInfo = await app.getFieldDescription('type_timestamp');
     expect(fieldInfo.qTags).to.include('$timestamp');
