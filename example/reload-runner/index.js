@@ -87,7 +87,7 @@ async function load() {
   try {
     await loadData(app, postgresqlConnectionSettings);
   } catch (e) {
-    console.log(`Failed to load data from PostgresSQL with error: ${e}`);
+    console.log(`Failed to load data from PostgreSQL with error: ${e}`);
     process.exit(1);
   }
 
