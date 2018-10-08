@@ -76,10 +76,20 @@ async function load() {
   }
 
   console.log('Loading from MySQL');
-  await loadData(app, mysqlConnectionSettings);
+  try {
+    await loadData(app, mysqlConnectionSettings);
+  } catch (e) {
+    console.log(`Failed to load data from MySQL with error: ${e}`);
+    process.exit(1);
+  }
 
   console.log('Loading from PostgreSQL');
-  await loadData(app, postgresqlConnectionSettings);
+  try {
+    await loadData(app, postgresqlConnectionSettings);
+  } catch (e) {
+    console.log(`Failed to load data from PostgreSQL with error: ${e}`);
+    process.exit(1);
+  }
 
   await global.deleteApp(appId);
 
