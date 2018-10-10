@@ -7,6 +7,7 @@ import qlik.connect.GrpcServer.*;
 import java.sql.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import static java.util.stream.Collectors.joining;
 
 public class ConnectorImpl
         extends ConnectorGrpc.ConnectorImplBase {
@@ -53,6 +54,13 @@ public class ConnectorImpl
         }
 
         String connectionString = "jdbc:" + map.get("driver") + "://" + map.get("host") + ":" + map.get("port") + "/" + map.get("database");
+
+        if (map.get("driver").equals("awsathena")) {
+            connectionString = "jdbc:awsathena://" + map.entrySet()
+            .stream()
+            .map(e -> e.getKey()+"="+e.getValue())
+            .collect(joining(";"));
+        }
 
         Connection conn = null;
         Statement stmt = null;
