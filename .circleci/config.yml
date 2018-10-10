@@ -42,7 +42,7 @@ jobs:
           path: ~/core-grpc-jdbc-connector
       - run:
           name: Run unittest
-          command: mvn test
+          command: mvn -B test
 workflows:
   version: 2
   build_and_test:

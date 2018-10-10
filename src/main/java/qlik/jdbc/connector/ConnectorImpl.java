@@ -5,14 +5,16 @@ import qlik.connect.ConnectorGrpc;
 import qlik.connect.GrpcServer.*;
 
 import java.sql.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.stream.Collectors.joining;
 
 public class ConnectorImpl
         extends ConnectorGrpc.ConnectorImplBase {
 
     private int fetchSize;
     private int maxDataChunkSize;
+    private static final Set<String> IGNORE_PARAMS = new HashSet<String>(Arrays.asList(new String[]{"host","port","provider","driver"}));
 
     public ConnectorImpl(Integer fetchSize, Integer maxDataChunkSize){
       super();
@@ -41,18 +43,37 @@ public class ConnectorImpl
         return builder.build();
     }
 
+    private Map<String, String> parseConnectionString(final String connection) {
+      Map<String, String> map = new LinkedHashMap<String, String>();
+
+      for(String keyValue: connection.split(" *; *")){
+        String[] pairs = keyValue.split(" *= *", 2);
+        map.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
+    } 
+
+      return map;
+    }
+
     public void getData(DataRequest request, StreamObserver<DataChunk> responseObserver) {
-        String str = request.getConnection().getConnectionString();
         String sql = request.getParameters().getStatement();
+        Map<String, String> map = this.parseConnectionString(request.getConnection().getConnectionString());
+        String connectionString = String.format("jdbc:%s://", map.get("driver"));
 
-        Map<String, String> map = new LinkedHashMap<String, String>();
-
-        for(String keyValue: str.split(" *; *")){
-            String[] pairs = keyValue.split(" *= *", 2);
-            map.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
+        if (map.containsKey("host") && map.containsKey("port")) {
+          // both host and port defined, assume regular JDBC driver in
+          // 'jdbc:driver://host:port/database' format
+          connectionString += String.format("%s:%d/%s", map.get("host"), map.get("port"), map.get("database"));
+        } else if (map.containsKey("host") || map.containsKey("port")) {
+          // either 'host' or 'port' is defined, but not both
+          throw new Error("'host' or 'port' is missing, assumed none or both to exist in connection string");
+        } else {
+          // no 'host' or 'path' defined, assume a driver like Athena with custom properties
+          // so just pass along all of them and let the JDBC driver throw exception if needed
+          connectionString += map.entrySet().stream()
+            .filter(e -> !IGNORE_PARAMS.contains(e.getKey()))
+            .map(e -> String.format("%s=%s", e.getKey(), e.getValue()))
+            .collect(joining(";"));
         }
-
-        String connectionString = "jdbc:" + map.get("driver") + "://" + map.get("host") + ":" + map.get("port") + "/" + map.get("database");
 
         Connection conn = null;
         Statement stmt = null;
