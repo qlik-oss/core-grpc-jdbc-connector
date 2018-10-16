@@ -26,7 +26,7 @@ WORKDIR /usr/src/app
 
 # install maven dependency packages (keep in image)
 COPY pom.xml /usr/src/app
-
+COPY AthenaJDBC42_2.0.5.jar /usr/src/app
 COPY src /usr/src/app/src
 
 RUN mvn install
