@@ -68,6 +68,53 @@ Other JDBC Drivers can be added to the pom.xml file in the following section:
 </dependencies>
 ```
 
+Make sure you start your Qlik Associative Engine with the proper gRPC connector string to enable your JDBC driver. [See an example here](./example/docker-compose.yml).
+
+### Athena driver
+
+### Installing driver
+
+The AWS Athena driver is not officially deployed on a Maven repository, so you have to download the jar file and place it in the connector project manually.
+
+[You can download the driver here](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).
+
+`pom.xml` entry:
+
+```xml
+<dependency>
+    <groupId>com.amazonaws.athena.jdbc</groupId>
+    <artifactId>jdbcdriver</artifactId>
+    <version>2.0.5</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/AthenaJDBC42_2.0.5.jar</systemPath>
+</dependency>
+```
+
+`Dockerfile` entry:
+
+```
+COPY AthenaJDBC42_2.0.5.jar /usr/src/app
+```
+
+### Example configuration
+
+Connection string:
+
+```
+{
+  qType: 'jdbc',
+  qName: 'jdbc',
+  qConnectionString: 'CUSTOM CONNECT TO "provider=jdbc;driver=awsathena;AwsRegion=eu-central-1;S3OutputLocation=s3://aws-athena-query-results-athenatest1-eu-central-1"',
+  qUserName: 'AWS Key',
+  qPassword: 'AWS Token',
+}
+```
+
+LOAD statement:
+
+```
+sql SELECT * FROM yourathendatabase.yourathenatable;
+```
 
 ## License
 This repository is licensed under [MIT](/LICENSE) but components used in the Dockerfile examples are under other licenses.
