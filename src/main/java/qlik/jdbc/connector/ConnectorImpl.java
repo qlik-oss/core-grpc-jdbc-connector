@@ -49,7 +49,7 @@ public class ConnectorImpl
       for(String keyValue: connection.split(" *; *")){
         String[] pairs = keyValue.split(" *= *", 2);
         map.put(pairs[0], pairs.length == 1 ? "" : pairs[1]);
-    } 
+    }
 
       return map;
     }
@@ -62,7 +62,7 @@ public class ConnectorImpl
         if (map.containsKey("host") && map.containsKey("port")) {
           // both host and port defined, assume regular JDBC driver in
           // 'jdbc:driver://host:port/database' format
-          connectionString += String.format("%s:%d/%s", map.get("host"), map.get("port"), map.get("database"));
+          connectionString += String.format("%s:%s/%s", map.get("host"), map.get("port"), map.get("database"));
         } else if (map.containsKey("host") || map.containsKey("port")) {
           // either 'host' or 'port' is defined, but not both
           throw new Error("'host' or 'port' is missing, assumed none or both to exist in connection string");
