@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "mocha --timeout 10s",
+    "test": "mocha --timeout 10s --exit",
     "start": "node index.js",
     "start:ci": "node index.js"
   },
