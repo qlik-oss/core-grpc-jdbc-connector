@@ -1,6 +1,18 @@
 version: 2
 jobs:
-  build:
+
+  unit-test:
+    docker:
+      - image: maven:3.5.4-jdk-8
+    working_directory: ~/core-grpc-jdbc-connector/
+    steps:
+      - checkout:
+          path: ~/core-grpc-jdbc-connector
+      - run:
+          name: Run unittest
+          command: mvn -B test
+
+  integration-test:
     docker:
       - image: circleci/node:8.12.0
     working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
@@ -33,19 +45,12 @@ jobs:
             TEST_CONTAINER_ID=$(docker run -d -e ENGINE_HOST=$GATEWAY_IP node:9.8.0 tail -f /dev/null)
             docker cp . $TEST_CONTAINER_ID:/
             docker exec $TEST_CONTAINER_ID sh -c 'npm test && npm run start:ci'
-  test:
-    docker:
-      - image: maven:3.5.4-jdk-8
-    working_directory: ~/core-grpc-jdbc-connector/
-    steps:
-      - checkout:
-          path: ~/core-grpc-jdbc-connector
-      - run:
-          name: Run unittest
-          command: mvn -B test
+
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - test
+      - unit-test
+      - integration-test:
+          requires:
+            - unit-test
