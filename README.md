@@ -92,9 +92,10 @@ You can download the driver [here](https://docs.aws.amazon.com/athena/latest/ug/
 </dependency>
 ```
 
-Put the following line in your `Dockerfile` before the `RUN mvn install` command:
+Put the following lines in your `Dockerfile` before the `RUN mvn install` command:
 
 ```bash
+COPY AthenaJDBC42_2.0.5.jar /usr/src/app
 RUN mvn install:install-file -Dfile=/usr/src/app/AthenaJDBC42_2.0.5.jar -DgroupId=com.amazonaws.athena.jdbc -DartifactId=jdbcdriver -Dversion=2.0.5 -Dpackaging=jar
 ```
 
