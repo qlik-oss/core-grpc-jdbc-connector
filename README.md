@@ -7,24 +7,26 @@ This connector exemplifies how a JDBC gRPC Connector can be written. It contains
 ## Run example
 
 Go to the examples folder and run the following:
-```
+
+```bash
 ACCEPT_EULA=<yes/no> docker-compose up --build -d
 ```
 
 Then go to the reload-runner directory and install NodeJs dependencies:
 
-```
+```bash
 npm install
 ```
 
 Use the following command to run the example:
 
-```
+```bash
 npm start
 ```
 
 To run integration tests, use the following command:
-```
+
+```bash
 npm test
 ```
 
@@ -47,18 +49,20 @@ These settings can be changed in the example in [docker-compose.yml](/examples/d
 ## Run locally
 
 ### Requirements
+
 - Java JDK 8.0
 - Maven 3.3.9
 
-```
+```bash
 mvn install
 java -jar ./target/core-grpc-jdbc-connector.jar
 ```
 
 ## Add other JDBC Drivers
+
 Other JDBC Drivers can be added to the pom.xml file in the following section:
 
-```
+```xml
 <dependencies>
   <dependency>
     <groupId>org.postgresql</groupId>
@@ -76,7 +80,7 @@ Make sure you start your Qlik Associative Engine with the proper gRPC connector 
 
 The AWS Athena driver is not officially deployed on a Maven repository, so you have to download the jar file and place it in the connector project manually.
 
-[You can download the driver here](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).
+You can download the driver [here](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).
 
 `pom.xml` entry:
 
@@ -85,22 +89,21 @@ The AWS Athena driver is not officially deployed on a Maven repository, so you h
     <groupId>com.amazonaws.athena.jdbc</groupId>
     <artifactId>jdbcdriver</artifactId>
     <version>2.0.5</version>
-    <scope>system</scope>
-    <systemPath>${project.basedir}/AthenaJDBC42_2.0.5.jar</systemPath>
 </dependency>
 ```
 
-`Dockerfile` entry:
+Put the following lines in your `Dockerfile` before the `RUN mvn install` command:
 
-```
+```bash
 COPY AthenaJDBC42_2.0.5.jar /usr/src/app
+RUN mvn install:install-file -Dfile=/usr/src/app/AthenaJDBC42_2.0.5.jar -DgroupId=com.amazonaws.athena.jdbc -DartifactId=jdbcdriver -Dversion=2.0.5 -Dpackaging=jar
 ```
 
 ### Example configuration
 
 Connection string:
 
-```
+```js
 {
   qType: 'jdbc',
   qName: 'jdbc',
@@ -112,10 +115,11 @@ Connection string:
 
 LOAD statement:
 
-```
+```qlik
 sql SELECT * FROM yourathendatabase.yourathenatable;
 ```
 
 ## License
+
 This repository is licensed under [MIT](/LICENSE) but components used in the Dockerfile examples are under other licenses.
 Make sure that you are complying with those licenses when using the built images.
