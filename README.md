@@ -80,7 +80,7 @@ Make sure you start your Qlik Associative Engine with the proper gRPC connector 
 
 The AWS Athena driver is not officially deployed on a Maven repository, so you have to download the jar file and place it in the connector project manually.
 
-[You can download the driver here](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).
+You can download the driver [here](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html).
 
 `pom.xml` entry:
 
@@ -92,7 +92,7 @@ The AWS Athena driver is not officially deployed on a Maven repository, so you h
 </dependency>
 ```
 
-`Dockerfile` entry:
+Put the following line in your `Dockerfile` before the `RUN mvn install` command:
 
 ```bash
 RUN mvn install:install-file -Dfile=/usr/src/app/AthenaJDBC42_2.0.5.jar -DgroupId=com.amazonaws.athena.jdbc -DartifactId=jdbcdriver -Dversion=2.0.5 -Dpackaging=jar
