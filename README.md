@@ -102,7 +102,7 @@ RUN mvn install:install-file -Dfile=/usr/src/app/AthenaJDBC42_2.0.5.jar -DgroupI
 
 Connection string:
 
-```json
+```js
 {
   qType: 'jdbc',
   qName: 'jdbc',
