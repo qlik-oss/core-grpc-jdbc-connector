@@ -2,9 +2,9 @@
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector.svg?style=shield)](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector)
 
-This connector exemplifies how a JDBC gRPC Connector can be written. It contains an example that includes a MySQL Database, a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
+This connector exemplifies how a JDBC gRPC Connector can be written. It contains examples that includes a MySQL Database, a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
 
-## Run example
+## Run examples
 
 Go to the examples folder and run the following:
 
@@ -12,7 +12,7 @@ Go to the examples folder and run the following:
 ACCEPT_EULA=<yes/no> docker-compose up --build -d
 ```
 
-Then follow the example for either corectl or node.
+Then follow the instructions for either corectl or node.
 
 ### Node
 
@@ -31,7 +31,7 @@ npm test
 
 ### Corectl
 
-To run the corectl example head into [/example/corectl](/example/corectl). If you do not yet have corectl installed just follow the download instructions from [corectl](https://github.com/qlik-oss/corectl).
+To run the corectl example head into [/examples/corectl](/examples/corectl). If you do not yet have corectl installed just follow the download instructions from [corectl](https://github.com/qlik-oss/corectl).
 
 Once installed you can build using either the postgres or mysql database with the following commands, respectively:
 ```bash
@@ -39,7 +39,7 @@ corectl build --script mysql.qvs
 corectl build --script postgres.qvs 
 ```
 
-Take a peek at [corectl.yml](/example/corectl/corectl.yml) to see how the connections are set up for corectl.
+Take a peek at [corectl.yml](/examples/corectl/corectl.yml) to see how the connections are set up for corectl.
 To view the tables you can then simply type:
 
 ```bash
@@ -89,7 +89,7 @@ Other JDBC Drivers can be added to the pom.xml file in the following section:
 </dependencies>
 ```
 
-Make sure you start your Qlik Associative Engine with the proper gRPC connector string to enable your JDBC driver. [See an example here](./example/docker-compose.yml).
+Make sure you start your Qlik Associative Engine with the proper gRPC connector string to enable your JDBC driver. [See an example here](./examples/docker-compose.yml).
 
 ### Athena driver
 

@@ -15,7 +15,7 @@ jobs:
   integration-test-node:
     docker:
       - image: circleci/node:8.15.1
-    working_directory: ~/core-grpc-jdbc-connector/example/node
+    working_directory: ~/core-grpc-jdbc-connector/examples/node
     steps:
       - checkout:
           path: ~/core-grpc-jdbc-connector
@@ -34,7 +34,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Spin up environment
-          working_directory: ~/core-grpc-jdbc-connector/example
+          working_directory: ~/core-grpc-jdbc-connector/examples
           command: ACCEPT_EULA=yes docker-compose up --build -d
       - run:
           name: Run node integration test
@@ -53,11 +53,11 @@ jobs:
       - checkout
       - run:
           name: Spin up environment
-          working_directory: ~/core-grpc-jdbc-connector/example
+          working_directory: ~/core-grpc-jdbc-connector/examples
           command: ACCEPT_EULA=yes docker-compose up --build -d
       - run:
           name: Run corectl integration test
-          working_directory: ~/core-grpc-jdbc-connector/example/corectl
+          working_directory: ~/core-grpc-jdbc-connector/examples/corectl
           command: |
             curl --silent --location "https://github.com/qlik-oss/corectl/releases/download/v0.5.0/corectl-$(uname -s)-x86_64.tar.gz" | tar xz -C .
             sleep 30 # Seems like dbs are not ready with 10 sec, so 30 should be safe
@@ -79,4 +79,3 @@ workflows:
       - integration-test-corectl:
           requires:
             - unit-test
-
