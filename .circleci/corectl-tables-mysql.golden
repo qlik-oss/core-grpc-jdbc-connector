@@ -1,0 +1,4 @@
+Name         Row count   RAM      Fields
+airports     8097        128.6k   rowID, airport, city, country, iatacode, icaocode, latitude, longitude, altitude, timezone, dst, tz
+                         
+Total RAM                831.5k
