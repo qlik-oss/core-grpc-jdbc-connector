@@ -18,7 +18,7 @@ const postgresqlConnectionSettings = {
   qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
   qName: 'jdbc',
   qConnectionString:
-   'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string includes both the provide to use and parameters to it.
+   'CUSTOM CONNECT TO "provider=jdbc;driver=postgresql;host=postgres-database;port=5432;database=postgres"', // the connection string includes both the provider to use and parameters to it.
   qUserName: 'postgres', // username and password for the postgres database, provided to the GRPC-Connector
   qPassword: 'postgres',
 };
@@ -27,8 +27,8 @@ const mysqlConnectionSettings = {
   qType: 'jdbc', // the name we defined as a parameter to engine in our docker-compose.yml
   qName: 'jdbc',
   qConnectionString:
-  'CUSTOM CONNECT TO "provider=jdbc;driver=mysql;host=mysql-database;port=3306;database=airport"', // the connection string includes both the provide to use and parameters to it.
-  qUserName: 'root', // username and password for the postgres database, provided to the GRPC-Connector
+  'CUSTOM CONNECT TO "provider=jdbc;driver=mysql;host=mysql-database;port=3306;database=airport"', // the connection string includes both the provider to use and parameters to it.
+  qUserName: 'root', // username and password for the mysql database, provided to the GRPC-Connector
   qPassword: 'mysecretpassword',
 };
 

@@ -12,10 +12,10 @@ jobs:
           name: Run unittest
           command: mvn -B test
 
-  integration-test:
+  integration-test-node:
     docker:
       - image: circleci/node:8.15.1
-    working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
+    working_directory: ~/core-grpc-jdbc-connector/examples/node
     steps:
       - checkout:
           path: ~/core-grpc-jdbc-connector
@@ -34,10 +34,10 @@ jobs:
       - setup_remote_docker
       - run:
           name: Spin up environment
-          working_directory: ~/core-grpc-jdbc-connector/example
+          working_directory: ~/core-grpc-jdbc-connector/examples
           command: ACCEPT_EULA=yes docker-compose up --build -d
       - run:
-          name: Run integration test
+          name: Run node integration test
           command: |
             set -e
             ENGINE_CONTAINER_ID=$(docker ps -aqf "name=qix-engine")
@@ -45,12 +45,37 @@ jobs:
             TEST_CONTAINER_ID=$(docker run -d -e ENGINE_HOST=$GATEWAY_IP node:9.8.0 tail -f /dev/null)
             docker cp . $TEST_CONTAINER_ID:/
             docker exec $TEST_CONTAINER_ID sh -c 'npm test && npm run start:ci'
+  
+  integration-test-corectl:
+    machine: true
+    working_directory: ~/core-grpc-jdbc-connector
+    steps:
+      - checkout
+      - run:
+          name: Spin up environment
+          working_directory: ~/core-grpc-jdbc-connector/examples
+          command: ACCEPT_EULA=yes docker-compose up --build -d
+      - run:
+          name: Run corectl integration test
+          working_directory: ~/core-grpc-jdbc-connector/examples/corectl
+          command: |
+            curl --silent --location "https://github.com/qlik-oss/corectl/releases/download/v0.5.0/corectl-$(uname -s)-x86_64.tar.gz" | tar xz -C .
+            sleep 30 # Seems like dbs are not ready with 10 sec, so 30 should be safe
+            ./corectl build --script mysql.qvs
+            ./corectl get tables > log
+            diff ../../.circleci/corectl-tables-mysql.golden log
+            ./corectl build --script postgres.qvs
+            ./corectl get tables > log
+            diff ../../.circleci/corectl-tables-postgres.golden log
 
 workflows:
   version: 2
   build_and_test:
     jobs:
       - unit-test
-      - integration-test:
+      - integration-test-node:
+          requires:
+            - unit-test
+      - integration-test-corectl:
           requires:
             - unit-test
