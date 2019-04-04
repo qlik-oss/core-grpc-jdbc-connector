@@ -12,23 +12,40 @@ Go to the examples folder and run the following:
 ACCEPT_EULA=<yes/no> docker-compose up --build -d
 ```
 
-Then go to the reload-runner directory and install NodeJs dependencies:
+Then follow the example for either corectl or node.
+
+### Node
+
+Head into [/examples/node](/examples/node) and install the dependencies and then run the script [index.js](/examples/node/index.js) using the following commands:
 
 ```bash
 npm install
-```
-
-Use the following command to run the example:
-
-```bash
 npm start
 ```
 
-To run integration tests, use the following command:
+To run integration tests you can use:
 
 ```bash
 npm test
 ```
+
+### Corectl
+
+To run the corectl example head into [/example/corectl](/example/corectl). If you do not yet have corectl installed just follow the download instructions from [corectl](https://github.com/qlik-oss/corectl).
+
+Once installed you can build using either the postgres or mysql database with the following commands, respectively:
+```bash
+corectl build --script mysql.qvs
+corectl build --script postgres.qvs 
+```
+
+Take a peek at [corectl.yml](/example/corectl/corectl.yml) to see how the connections are set up for corectl.
+To view the tables you can then simply type:
+
+```bash
+corectl get tables
+```
+
 
 ### Performance tips
 

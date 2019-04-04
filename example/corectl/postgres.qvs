@@ -1,0 +1,3 @@
+lib connect to 'postgres';
+airports:
+sql SELECT * FROM airports;

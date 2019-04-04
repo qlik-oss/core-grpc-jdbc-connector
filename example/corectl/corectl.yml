@@ -1,0 +1,21 @@
+engine: localhost:19076
+app: reloadapp.qvf
+connections:
+  mysql:
+    type: jdbc
+    username: root 
+    password: mysecretpassword  
+    settings:
+      driver: mysql
+      host: mysql-database
+      port: 3306
+      database: airport
+  postgres:
+    type: jdbc
+    username: postgres
+    password: postgres 
+    settings:
+      driver: postgresql 
+      host: postgres-database
+      port: 5432
+      database: postgres
