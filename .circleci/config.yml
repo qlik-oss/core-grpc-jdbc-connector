@@ -15,7 +15,7 @@ jobs:
   integration-test:
     docker:
       - image: circleci/node:8.15.1
-    working_directory: ~/core-grpc-jdbc-connector/example/reload-runner
+    working_directory: ~/core-grpc-jdbc-connector/example/node
     steps:
       - checkout:
           path: ~/core-grpc-jdbc-connector
