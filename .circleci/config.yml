@@ -3,7 +3,7 @@ jobs:
 
   unit-test:
     docker:
-      - image: maven:3.6.2-jdk-8
+      - image: maven:3.6.3-jdk-8
     working_directory: ~/core-grpc-jdbc-connector/
     steps:
       - checkout:
