@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector.svg?style=shield)](https://circleci.com/gh/qlik-oss/core-grpc-jdbc-connector)
 
+*As of 1 July 2020, Qlik Core is no longer available to new customers. No further maintenance will be done in this repository.*
+
 This connector exemplifies how a JDBC gRPC Connector can be written. It contains examples that includes a MySQL Database, a PostgreSQL Database, a QIX Engine and the JDBC gRPC connector.
 
 ## Run examples
